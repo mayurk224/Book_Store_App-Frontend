@@ -22,14 +22,7 @@ const BookModal = ({ book, onClose }) => {
           <p className="text-gray-600">Author: {book.author}</p>
           <p className="text-gray-600">Published Year: {book.publishYear}</p>
         </div>
-        <p className="text-gray-700">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Non doloribus
-          omnis consectetur provident, harum repudiandae atque quas sequi.
-          Doloribus cupiditate debitis in beatae, nam amet aut et libero nulla,
-          exercitationem obcaecati accusamus soluta esse possimus magni facilis
-          at saepe maiores eum voluptatem odio corrupti? Molestiae non voluptas
-          quas enim sint!
-        </p>
+        <p className="text-gray-700">{book.description}</p>
       </div>
     </div>
   );

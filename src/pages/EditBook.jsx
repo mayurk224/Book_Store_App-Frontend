@@ -3,14 +3,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
+import { useSnackbar } from "notistack";
 
 const EditBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [publishYear, setPublishYear] = useState("");
+  const [description, setDescription] = useState(""); // New state for description
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setLoading(true);
@@ -20,30 +23,33 @@ const EditBook = () => {
         setAuthor(res.data.author);
         setTitle(res.data.title);
         setPublishYear(res.data.publishYear);
+        setDescription(res.data.description); // Fetch and set the description
         setLoading(false);
       })
       .catch((err) => {
-        alert("Error: " + err.message);
+        enqueueSnackbar("Error while editing book", { variant: "error" });
         console.log(err);
         setLoading(false);
       });
-  }, []);
+  }, [id]); // Added id to the dependency array
 
   const handleEditBook = () => {
     const data = {
       title,
       author,
       publishYear,
+      description, // Include description in the updated data
     };
     setLoading(true);
     axios
       .put(`http://localhost:5555/books/${id}`, data)
       .then(() => {
         setLoading(false);
+        enqueueSnackbar("Book Updated Successfully", { variant: "success" });
         navigate("/");
       })
       .catch((err) => {
-        alert("Error: " + err.message);
+        enqueueSnackbar("Error while updating book", { variant: "error" });
         setLoading(false);
       });
   };
@@ -101,6 +107,24 @@ const EditBook = () => {
               onChange={(e) => setPublishYear(e.target.value)}
               className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter publish year"
+            />
+          </div>
+          {/* Description Field */}
+          <div className="flex flex-col">
+            <label
+              htmlFor="description"
+              className="text-gray-700 font-medium mb-2"
+            >
+              Description
+            </label>
+            <textarea
+              name="description"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter book description"
+              rows="4" // Adjust the number of rows as needed
             />
           </div>
           <button

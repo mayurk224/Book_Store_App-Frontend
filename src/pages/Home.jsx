@@ -36,7 +36,7 @@ const Home = () => {
   return (
     <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Books List</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Books Store App</h1>
         <Link
           to="/books/create"
           className="text-blue-600 hover:text-blue-800 transition duration-200"

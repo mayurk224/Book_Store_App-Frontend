@@ -3,29 +3,34 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
+import { useSnackbar } from "notistack";
 
 const CreateBook = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [publishYear, setPublishYear] = useState("");
+  const [description, setDescription] = useState(""); // New state for description
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSaveBook = () => {
     const data = {
       title,
       author,
       publishYear,
+      description, 
     };
     setLoading(true);
     axios
       .post("http://localhost:5555/books", data)
       .then(() => {
         setLoading(false);
+        enqueueSnackbar("Book Created Successfully", { variant: "success" });
         navigate("/");
       })
       .catch((err) => {
-        alert("Error: " + err.message);
+        enqueueSnackbar("Error while creating book", { variant: "error" });
         setLoading(false);
       });
   };
@@ -83,6 +88,23 @@ const CreateBook = () => {
               onChange={(e) => setPublishYear(e.target.value)}
               className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter publish year"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label
+              htmlFor="description"
+              className="text-gray-700 font-medium mb-2"
+            >
+              Description
+            </label>
+            <textarea
+              name="description"
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter book description"
+              rows="4"
             />
           </div>
           <button
