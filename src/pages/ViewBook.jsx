@@ -51,10 +51,6 @@ const ViewBook = () => {
               {book.author}
             </p>
             <p>
-              <span className="font-medium text-gray-700">Description:</span>{" "}
-              {book.description}
-            </p>
-            <p>
               <span className="font-medium text-gray-700">Publish Year:</span>{" "}
               {book.publishYear}
             </p>
