@@ -8,7 +8,7 @@ import BookModal from "./BookModal";
 
 const BookTable = ({ books }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(null); // State to store the selected book
+  const [selectedBook, setSelectedBook] = useState(null);
 
   const handleOpenModal = (book) => {
     setSelectedBook(book);

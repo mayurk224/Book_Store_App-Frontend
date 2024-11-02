@@ -17,7 +17,7 @@ const Home = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:5555/books");
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/books`);
         setBooks(Array.isArray(res.data.books) ? res.data.books : []);
       } catch (err) {
         console.error(err);

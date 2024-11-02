@@ -14,7 +14,9 @@ const ViewBook = () => {
     const fetchBook = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:5555/books/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/books/${id}`
+        );
         setBook(res.data); // Set the response data to `book`
       } catch (err) {
         console.error("Error fetching book data:", err);

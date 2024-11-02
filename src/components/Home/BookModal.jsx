@@ -8,21 +8,30 @@ const BookModal = ({ book, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md"
-        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-lg relative"
+        onClick={(e) => e.stopPropagation()} // Prevent click from closing modal
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">{book.title}</h2>
-          <AiOutlineClose
-            onClick={onClose}
-            className="cursor-pointer text-gray-600 hover:text-gray-800 transition duration-200"
-          />
-        </div>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 transition duration-200"
+        >
+          <AiOutlineClose size={24} />
+        </button>
+
+        <h2 className="text-2xl font-semibold mb-4">{book.title}</h2>
+
         <div className="mb-4">
-          <p className="text-gray-600">Author: {book.author}</p>
-          <p className="text-gray-600">Published Year: {book.publishYear}</p>
+          <p className="text-gray-600">
+            <strong>Author:</strong> {book.author}
+          </p>
+          <p className="text-gray-600">
+            <strong>Published Year:</strong> {book.publishYear}
+          </p>
         </div>
-        <p className="text-gray-700">{book.description}</p>
+
+        <p className="text-gray-700">
+          {book.description || "No description available."}
+        </p>
       </div>
     </div>
   );
