@@ -30,7 +30,6 @@ const CreateBook = () => {
       navigate("/");
     } catch (err) {
       enqueueSnackbar("Error while creating book", { variant: "error" });
-      alert(`${API_URL}/books`);
     } finally {
       setLoading(false);
     }
