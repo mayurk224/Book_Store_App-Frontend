@@ -35,6 +35,8 @@ const CreateBook = () => {
     }
   };
 
+  alert(`${API_URL}/books`);
+
   const { title, author, publishYear, description } = formData;
 
   return (
