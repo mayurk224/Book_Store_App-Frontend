@@ -13,11 +13,13 @@ const Home = () => {
     localStorage.getItem("viewToggle") || "table"
   );
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/books`);
+        const res = await axios.get(`${API_URL}/books`);
         setBooks(Array.isArray(res.data.books) ? res.data.books : []);
       } catch (err) {
         console.error(err);
@@ -25,7 +27,6 @@ const Home = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 

@@ -11,14 +11,13 @@ const DeleteBook = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Fetch the book details
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/books/${id}`
-        );
+        const res = await axios.get(`${API_URL}/books/${id}`);
         setBook(res.data);
       } catch (err) {
         console.error(err);

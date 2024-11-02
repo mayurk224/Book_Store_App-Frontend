@@ -6,34 +6,36 @@ import Spinner from "../components/Spinner";
 import { useSnackbar } from "notistack";
 
 const CreateBook = () => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [publishYear, setPublishYear] = useState("");
-  const [description, setDescription] = useState(""); // New state for description
+  const [formData, setFormData] = useState({
+    title: "",
+    author: "",
+    publishYear: "",
+    description: "",
+  });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleSaveBook = () => {
-    const data = {
-      title,
-      author,
-      publishYear,
-      description,
-    };
-    setLoading(true);
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/books`, data)
-      .then(() => {
-        setLoading(false);
-        enqueueSnackbar("Book Created Successfully", { variant: "success" });
-        navigate("/");
-      })
-      .catch((err) => {
-        enqueueSnackbar("Error while creating book", { variant: "error" });
-        setLoading(false);
-      });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleSaveBook = async () => {
+    try {
+      setLoading(true);
+      await axios.post(`${API_URL}/books`, formData);
+      enqueueSnackbar("Book Created Successfully", { variant: "success" });
+      navigate("/");
+    } catch (err) {
+      enqueueSnackbar("Error while creating book", { variant: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const { title, author, publishYear, description } = formData;
 
   return (
     <div className="container mx-auto max-w-lg p-6 bg-white shadow-md rounded-lg mt-10">
@@ -45,73 +47,45 @@ const CreateBook = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="flex flex-col">
-            <label htmlFor="title" className="text-gray-700 font-medium mb-2">
-              Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter book title"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="author" className="text-gray-700 font-medium mb-2">
-              Author
-            </label>
-            <input
-              type="text"
-              name="author"
-              id="author"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter author name"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="publishYear"
-              className="text-gray-700 font-medium mb-2"
-            >
-              Publish Year
-            </label>
-            <input
-              type="number"
-              name="publishYear"
-              id="publishYear"
-              value={publishYear}
-              onChange={(e) => setPublishYear(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter publish year"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="description"
-              className="text-gray-700 font-medium mb-2"
-            >
-              Description
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter book description"
-              rows="4"
-            />
-          </div>
+          {["title", "author", "publishYear", "description"].map((field) => (
+            <div key={field} className="flex flex-col">
+              <label
+                htmlFor={field}
+                className="text-gray-700 font-medium mb-2 capitalize"
+              >
+                {field === "publishYear" ? "Publish Year" : field}
+              </label>
+              {field === "description" ? (
+                <textarea
+                  name={field}
+                  id={field}
+                  value={description}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={`Enter ${field}`}
+                  rows="4"
+                />
+              ) : (
+                <input
+                  type={field === "publishYear" ? "number" : "text"}
+                  name={field}
+                  id={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={`Enter ${field}`}
+                />
+              )}
+            </div>
+          ))}
           <button
             onClick={handleSaveBook}
-            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-150 ease-in-out"
+            className={`w-full py-2 px-4 ${
+              loading ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
+            } text-white font-semibold rounded-md transition duration-150 ease-in-out`}
+            disabled={loading}
           >
-            Create
+            {loading ? "Creating..." : "Create"}
           </button>
         </div>
       )}
